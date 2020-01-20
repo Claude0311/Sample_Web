@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜尋頁</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+	<form id="searchForm">
+		<label>學號</label>
+		<input type="text" id="Student_ID" placeholder="學號">
+		<button type="button" id="login_submit">確認</button>
+	</form>
+	<table>
+	 <thead>
+	  <tr>
+		<th>學號</th>
+		<th>卡號</th>
+		<th>姓名</th>
+		<th>系所</th>
+		<th>年級</th>
+	  </tr>
+	 </thead>
+	 <tbody id="tbody1">
+	 </tbody>
+	</table>
+</body>
+<script>
+	$("#login_submit").click(function(){
+		//以ajax發送JSON
+		$.ajax({
+			type: "post",
+			url: "/addUser",
+			dataType: "json",
+			data:{
+				Student_ID: $('#Student_ID').val(),
+			},
+			success: function(data){
+			//接收回傳的數據，前端判斷如何行動
+			console.log(data);
+			if(data){
+				if(data.message==true){
+					console.log("顯示資料");
+					var tableData="";
+					for(var i=0;i<data.data.length;i++){
+						var tmpD = data.data[i];
+						tableData+="<tr>";
+						tableData+="<td>"+tmpD.Student_ID+"</td>";
+						tableData+="<td>"+tmpD.Card_ID+"</td>";
+						tableData+="<td>"+tmpD.Name+"</td>";
+						tableData+="<td>"+tmpD.Department+"</td>";
+						tableData+="<td>"+tmpD.Grade+"</td>";
+						tableData+="</tr>";
+					}
+					$("#tbody1").html(tableData);
+				}else{
+				alert('無查詢結果');
+				}
+			}
+			}
+		});
+	});
+</script>
+</html>

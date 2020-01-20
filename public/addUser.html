@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>註冊頁</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+	<form id="signupForm">
+		<label>學號</label>
+		<input type="text" id="Student_ID" placeholder="學號">
+		<label>卡號</label>
+		<input type="text" id="Card_ID" placeholder="卡號">
+		<label>姓名</label>
+		<input type="text" id="Name" placeholder="姓名">
+		<label>系所</label>
+		<input type="text" id="Department" placeholder="系所">
+		<label>年級</label>
+		<input type="text" id="Grade" placeholder="年級">
+		<button type="button" id="login_submit">確認</button>
+	</form>
+</body>
+<script>
+	$("#login_submit").click(function(){
+		//以ajax發送JSON
+		$.ajax({
+			type: "post",
+			url: "/addUser",
+			dataType: "json",
+			data:{
+				Student_ID: $('#Student_ID').val(),
+				Card_ID: $('#Card_ID').val(),
+				Name: $('#Name').val(),
+				Department: $('#Department').val(),
+				Grade: $('#Grade').val()
+			},
+			success: function(data){
+			//接收回傳的數據，前端判斷如何行動
+			console.log(data);
+			if(data){
+				if(data.message==true){
+				alert('註冊成功，歡迎',data.data);
+				}else{
+				alert('帳號已存在');
+				}
+			}
+			}
+		});
+	});
+</script>
+</html>
